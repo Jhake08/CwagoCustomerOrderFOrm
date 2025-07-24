@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CWAGO VENTURES - Customer Order Form</title>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #1E3C72, #2A5298, #6A11CB, #2575FC);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-container {
+        max-width: 800px;
+        width: 100%;
+        padding: 30px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        color: #fff;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 40px;
+        font-weight: 600;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: 500;
+    }
+
+    select, input, textarea {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+    select:focus, input:focus, textarea:focus {
+        outline: none;
+        border-color: #00bcd4;
+        background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .error {
+        color: #ffbaba;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    button {
+        flex: 1;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    select, input, textarea {
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    select option {
+        background-color: #1e1e1e;
+        color: #ffffff;
+    }
+
+    select:focus, input:focus, textarea:focus {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: #00bcd4;
+        color: #fff;
+    }
+
+    button {
+        font-weight: 600;
+        color: #fff;
+    }
+
+    button:focus {
+        outline: 2px solid #fff;
+        outline-offset: 2px;
+    }
+
+    #btnDelete {
+        background-color: #dc3545;
+        order: 1;
+    }
+
+    #btnDelete:hover {
+        background-color: #c82333;
+    }
+
+    #btnSubmit {
+        background-color: #28a745;
+        order: 2;
+    }
+
+    #btnSubmit:hover {
+        background-color: #218838;
+    }
+
+    #btnGenerateReport {
+        background-color: #17a2b8;
+        order: 3;
+    }
+
+    #btnGenerateReport:hover {
+        background-color: #138496;
+    }
+
+    /* Popup styling */
+    #reportPopup {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(30, 60, 114, 0.95);
+        padding: 20px 30px;
+        border-radius: 10px;
+        color: white;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+        z-index: 9999;
+        max-width: 320px;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: none; /* Hidden by default */
+    }
+
+    #reportPopupClose {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        font-size: 24px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        user-select: none;
+    }
+    #reportPopupClose:hover {
+        color: #ff6666;
+    }
+</style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>CUSTOMER ORDER FORM</h2>
+        <div class="form-group">
+            <label for="cbSheetName">Select Date (Sheet Tab):</label>
+            <select id="cbSheetName" required>
+                <option value="">Select Date</option>
+            </select>
+            <div id="sheetNameError" class="error"></div>
+        </div>
+
+        <!-- Moved Facebook Page dropdown below Date dropdown as per user feedback -->
+        <div class="form-group">
+            <label for="cbFacebookPage">Facebook Page:</label>
+            <select id="cbFacebookPage">
+                <option value="">Select Facebook Page</option>
+            </select>
+            <div id="facebookPageError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="cbAgent">Agent:</label>
+            <select id="cbAgent" required>
+                <option value="">Select Agent</option>
+            </select>
+            <div id="agentError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtCustomerName">Customer Name:</label>
+            <input type="text" id="txtCustomerName" required />
+            <div id="customerNameError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtAddress">Address:</label>
+            <textarea id="txtAddress" rows="3" required></textarea>
+            <div id="addressError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="txtContactNo">Contact No:</label>
+            <input type="text" id="txtContactNo" required />
+            <div id="contactNoError" class="error"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="cbRemarks">Product Combo:</label>
+            <select id="cbRemarks">
+                <option value="">Select Product Combo</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button id="btnDelete">Delete Last Entry</button>
+            <button id="btnSubmit">Submit</button>
+            <button id="btnGenerateReport">Generate Report</button>
+        </div>
+    </div>
+
+    <!-- Popup Report -->
+    <div id="reportPopup">
+        <span id="reportPopupClose" title="Close">&times;</span>
+        <h3>Report Summary</h3>
+        <p id="reportContent"></p>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM fully loaded');
+
+        loadFormData();
+
+        function validateForm() {
+            let isValid = true;
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+
+            if (!document.getElementById('cbSheetName').value) {
+                document.getElementById('sheetNameError').textContent = 'Please select a date';
+                isValid = false;
+            }
+
+            if (!document.getElementById('cbAgent').value) {
+                document.getElementById('agentError').textContent = 'Please select an agent';
+                isValid = false;
+            }
+
+            if (!document.getElementById('txtCustomerName').value.trim()) {
+                document.getElementById('customerNameError').textContent = 'Please enter customer name';
+                isValid = false;
+            }
+
+            if (!document.getElementById('txtAddress').value.trim()) {
+                document.getElementById('addressError').textContent = 'Please enter address';
+                isValid = false;
+            }
+
+            if (!document.getElementById('txtContactNo').value.trim()) {
+                document.getElementById('contactNoError').textContent = 'Please enter phone number';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function loadFormData() {
+            console.log('Loading form data');
+
+            google.script.run.withSuccessHandler(function(sheetNames) {
+                populateDropdown('cbSheetName', sheetNames);
+            }).withFailureHandler(function(error) {
+                console.error('Error loading sheet names:', error);
+                populateDropdown('cbSheetName', ['2023-01-01', '2023-01-02', '2023-01-03']);
+            }).getSheetNames();
+
+            google.script.run.withSuccessHandler(function(agents) {
+                populateDropdown('cbAgent', agents);
+            }).withFailureHandler(function(error) {
+                console.error('Error loading agents:', error);
+                populateDropdown('cbAgent', ['Harley', 'Gab', 'Pia', 'Mase', 'Benjie']);
+            }).getAgents();
+
+            google.script.run.withSuccessHandler(function(productCombos) {
+                populateDropdown('cbRemarks', productCombos);
+            }).withFailureHandler(function(error) {
+                console.error('Error loading product combos:', error);
+                populateDropdown('cbRemarks', [
+                    '1 BOX LIPOCOLLA',
+                    '1 PC PORTABLE SHAVER',
+                    '1 MOLDABLE FALSE TEETH',
+                    '2 PCS FOIL SEALANT',
+                    '2 PCS BERRY SOAP'
+                ]);
+            }).getProductCombo();
+        }
+
+        // Add event listener to update Facebook Page dropdown when sheet tab changes
+        document.getElementById('cbSheetName').addEventListener('change', function() {
+            const selectedSheet = this.value;
+            if (!selectedSheet) {
+                populateDropdown('cbFacebookPage', []);
+                return;
+            }
+            google.script.run.withSuccessHandler(function(fbPages) {
+                populateDropdown('cbFacebookPage', fbPages);
+            }).withFailureHandler(function(error) {
+                console.error('Error loading Facebook pages:', error);
+                populateDropdown('cbFacebookPage', []);
+            }).getFacebookPages(selectedSheet);
+        });
+
+        function populateDropdown(id, items) {
+            const select = document.getElementById(id);
+            if (!select) return;
+            select.innerHTML = '<option value="">Select</option>';
+            items.forEach(item => {
+                const opt = document.createElement('option');
+                opt.value = item;
+                opt.textContent = item;
+                select.appendChild(opt);
+            });
+        }
+
+        document.getElementById('btnSubmit').addEventListener('click', function() {
+            if (!validateForm()) return;
+
+            const sheetName = document.getElementById('cbSheetName').value;
+            const facebookPageName = document.getElementById('cbFacebookPage').value;
+            const agent = document.getElementById('cbAgent').value;
+            const customerName = document.getElementById('txtCustomerName').value.trim();
+            const address = document.getElementById('txtAddress').value.trim();
+            const phoneNo = document.getElementById('txtContactNo').value.trim();
+            const productCombo = document.getElementById('cbRemarks').value;
+
+            google.script.run.withSuccessHandler(() => {
+                alert('Data saved successfully!');
+                clearForm();
+            }).withFailureHandler(error => {
+                alert('Error saving data: ' + error.message);
+            }).addDataToSheet(sheetName, facebookPageName, agent, customerName, address, phoneNo, productCombo);
+        });
+
+        document.getElementById('btnDelete').addEventListener('click', function() {
+            const sheetName = document.getElementById('cbSheetName').value;
+            if (!sheetName) {
+                alert('Please select a date to delete its last record');
+                return;
+            }
+            if (confirm(`Are you sure you want to delete the last entry from "${sheetName}"?`)) {
+                google.script.run.withSuccessHandler(() => {
+                    alert('Last record deleted successfully.');
+                }).withFailureHandler(error => {
+                    alert('Error deleting last record: ' + error.message);
+                }).deleteLastRecord(sheetName);
+            }
+        });
+
+        document.getElementById('btnGenerateReport').addEventListener('click', function() {
+            const sheetName = document.getElementById('cbSheetName').value;
+            const facebookPageName = document.getElementById('cbFacebookPage').value;
+            if (!sheetName) {
+                alert('Please select a date to generate report.');
+                return;
+            }
+            if (!facebookPageName) {
+                alert('Please select a Facebook Page to generate report.');
+                return;
+            }
+            google.script.run.withSuccessHandler(function(report) {
+                showReportPopup(report);
+            }).withFailureHandler(function(error) {
+                alert('Error generating report: ' + error.message);
+            }).generateReport(sheetName, facebookPageName);
+        });
+
+        function clearForm() {
+            document.getElementById('txtCustomerName').value = '';
+            document.getElementById('txtAddress').value = '';
+            document.getElementById('txtContactNo').value = '';
+            document.getElementById('cbRemarks').value = '';
+            document.querySelectorAll('.error').forEach(el => el.textContent = '');
+        }
+
+        // Show report popup with close button
+        function showReportPopup(report) {
+            const popup = document.getElementById('reportPopup');
+            const content = document.getElementById('reportContent');
+
+            content.innerHTML = `
+                <strong>Facebook Page:</strong> ${report.facebookPage}<br>
+                <strong>Total Quantity:</strong> ${report.totalQuantity}<br>
+                <strong>Total Sum:</strong> ₱${parseFloat(report.totalPrice).toFixed(2)}
+            `;
+            popup.style.display = 'block';
+        }
+
+        document.getElementById('reportPopupClose').addEventListener('click', function() {
+            document.getElementById('reportPopup').style.display = 'none';
+        });
+    });
+</script>
+</body>
+</html>
